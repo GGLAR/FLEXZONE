@@ -11,9 +11,7 @@
 <header>
   <div class="container navbar">
     <div class="logo">Flexzone</div>
-
     <button class="menu-toggle" aria-label="Open menu">☰</button>
-
     <nav>
       <a href="index.html">Home</a>
       <a href="programs.html">Programs</a>
@@ -31,10 +29,8 @@
 
 <section class="contact container">
   <form id="contactForm" aria-label="Contact form">
-
     <input type="text" id="name" placeholder="Full Name" required>
     <input type="email" id="email" placeholder="Email" required>
-
     <select id="program" aria-label="Select program">
       <option value="">Select Program</option>
       <option>Biceps</option>
@@ -46,18 +42,15 @@
       <option>Cardio</option>
       <option>Recovery Flow</option>
     </select>
-
-    <textarea id="message" placeholder="Your Message" ></textarea>
-
+    <textarea id="message" placeholder="Your Message"></textarea>
     <button type="submit" class="btn btn-primary">Send Message</button>
-
   </form>
 
   <div class="hours">
     <h3>Opening Hours</h3>
     <p>Mon–Sun: 24/7</p>
     <p>Saturday: 8:00am to 5:00pm</p>
-    <p>Sunday: Closed </p>
+    <p>Sunday: Closed</p>
     <h3>Location</h3>
     <p>Lucena City, Ibabang Dupay, Montreal Street</p>
   </div>
@@ -66,7 +59,23 @@
 <footer>© 2025 Flexzone — Built for the Strong.</footer>
 
 <script src="script.js"></script>
-<script>
+
+<script type="module">
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
   let selectedProgram = localStorage.getItem("selectedProgram");
   if (selectedProgram) {
@@ -83,7 +92,7 @@
 
   const selectedPlan = localStorage.getItem("selectedPlan") || "";
 
-  document.getElementById("contactForm").addEventListener("submit", function(e){
+  document.getElementById("contactForm").addEventListener("submit", async function(e){
     e.preventDefault();
 
     const name = document.getElementById("name").value.trim();
@@ -93,17 +102,23 @@
     const plan = selectedPlan;
     const date = new Date().toLocaleString();
 
-    const user = { name, email, message, program, plan, date };
-
-    const stored = JSON.parse(localStorage.getItem("signups")) || [];
-    stored.push(user);
-    localStorage.setItem("signups", JSON.stringify(stored));
+    await addDoc(collection(db, "signups"), {
+      name: name,
+      email: email,
+      message: message,
+      program: program,
+      plan: plan,
+      date: date
+    });
 
     localStorage.removeItem("selectedPlan");
     localStorage.removeItem("selectedProgram");
+
     window.location.href = "admin.html";
   });
+
 </script>
 
 </body>
 </html>
+
