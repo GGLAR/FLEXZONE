@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
 <header>
   <div class="container navbar">
     <div class="logo">Flexzone</div>
@@ -28,7 +29,8 @@
 
 <section class="contact container">
 
-  <form id="contactForm" aria-label="Contact form">
+  <form id="contactForm">
+
     <input type="text" id="name" placeholder="Full Name" required>
     <input type="email" id="email" placeholder="Email" required>
 
@@ -53,10 +55,12 @@
     <h3>Opening Hours</h3>
     <p>Mon–Sun: 24/7</p>
     <p>Saturday: 8:00am to 5:00pm</p>
-    <p>Sunday: Closed </p>
+    <p>Sunday: Closed</p>
+
     <h3>Location</h3>
     <p>Lucena City, Ibabang Dupay, Montreal Street</p>
   </div>
+
 </section>
 
 <footer>© 2025 Flexzone — Built for the Strong.</footer>
@@ -67,7 +71,7 @@
   let savedProgram = localStorage.getItem("selectedProgram");
   if (savedProgram) {
     const sel = document.getElementById("program");
-    let exists = Array.from(sel.options).some(o => o.value === savedProgram);
+    let exists = [...sel.options].some(o => o.value === savedProgram);
     if (!exists) {
       const opt = document.createElement("option");
       opt.value = savedProgram;
@@ -84,21 +88,21 @@
 
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
-    const message = document.getElementById("message").value.trim();
     const program = document.getElementById("program").value;
+    const message = document.getElementById("message").value.trim();
     const plan = savedPlan;
     const date = new Date().toLocaleString();
 
-    const entry = { name, email, message, program, plan, date };
+    const entry = { name, email, program, plan, message, date };
 
     const stored = JSON.parse(localStorage.getItem("signups")) || [];
     stored.push(entry);
     localStorage.setItem("signups", JSON.stringify(stored));
 
-    localStorage.removeItem("selectedPlan");
     localStorage.removeItem("selectedProgram");
+    localStorage.removeItem("selectedPlan");
 
-    alert("Message sent successfully!");
+    alert("Your message has been sent successfully!");
     this.reset();
   });
 
@@ -106,5 +110,3 @@
 
 </body>
 </html>
-
-
