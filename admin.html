@@ -44,84 +44,71 @@
 
 </div>
 
-<script>
-  function loadSignups(){
-    const stored = JSON.parse(localStorage.getItem('signups')) || [];
-    const tbody = document.querySelector('#signupTable tbody');
-    tbody.innerHTML = '';
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } 
+    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    stored.slice().reverse().forEach((u, idx) => {
-      const tr = document.createElement('tr');
+  const firebaseConfig = {
+    apiKey: "AIzaSyDQ-dn4tUmETNMbagt5CZbIf4T8g2rv_Z8",
+    authDomain: "flexzone-75001.firebaseapp.com",
+    projectId: "flexzone-75001",
+    storageBucket: "flexzone-75001.firebasestorage.app",
+    messagingSenderId: "441698000524",
+    appId: "1:441698000524:web:58b7a1e4e7cc11633165a9",
+    measurementId: "G-HNQ8P59D12"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function loadSignups(){
+    const tbody = document.querySelector("#signupTable tbody");
+    tbody.innerHTML = "";
+
+    const snap = await getDocs(collection(db, "signups"));
+    snap.forEach(d => {
+      const u = d.data();
+      const tr = document.createElement("tr");
+
       tr.innerHTML = `
-        <td>${escapeHtml(u.name || '')}</td>
-        <td>${escapeHtml(u.email || '')}</td>
-        <td>${escapeHtml(u.program || '-')}</td>
-        <td>${escapeHtml(u.plan || '-')}</td>
-        <td>${escapeHtml(u.date || '')}</td>
+        <td>${u.name}</td>
+        <td>${u.email}</td>
+        <td>${u.program}</td>
+        <td>${u.plan}</td>
+        <td>${u.date}</td>
         <td>
-          <button class="edit-btn" data-idx="${stored.length - 1 - idx}">Edit</button>
-          <button class="delete-btn" data-idx="${stored.length - 1 - idx}">Delete</button>
+          <button onclick="editSignup('${d.id}')">Edit</button>
+          <button onclick="deleteSignup('${d.id}')">Delete</button>
         </td>
       `;
+
       tbody.appendChild(tr);
     });
-
-    document.querySelectorAll('.delete-btn').forEach(btn=>{
-      btn.addEventListener('click', function(){
-        const i = Number(this.getAttribute('data-idx'));
-        deleteSignup(i);
-      });
-    });
-
-    document.querySelectorAll('.edit-btn').forEach(btn=>{
-      btn.addEventListener('click', function(){
-        const i = Number(this.getAttribute('data-idx'));
-        editSignup(i);
-      });
-    });
   }
 
-  function escapeHtml(str){
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  function deleteSignup(index){
-    const arr = JSON.parse(localStorage.getItem('signups')) || [];
-    if(index < 0 || index >= arr.length) return;
-    arr.splice(index, 1);
-    localStorage.setItem('signups', JSON.stringify(arr));
+  window.deleteSignup = async function(id){
+    await deleteDoc(doc(db, "signups", id));
     loadSignups();
   }
 
-  function editSignup(index){
-    const arr = JSON.parse(localStorage.getItem('signups')) || [];
-    const u = arr[index];
-    if(!u) return;
-    const newName = prompt('Edit name:', u.name) || u.name;
-    const newEmail = prompt('Edit email:', u.email) || u.email;
-    const newProgram = prompt('Edit program:', u.program || '') || u.program;
-    const newPlan = prompt('Edit plan:', u.plan || '') || u.plan;
-    arr[index] = { ...u, name: newName, email: newEmail, program: newProgram, plan: newPlan };
-    localStorage.setItem('signups', JSON.stringify(arr));
-    loadSignups();
+  window.editSignup = async function(id){
+    const ref = doc(db, "signups", id);
+    const snap = await getDocs(collection(db, "signups"));
   }
 
+  loadSignups();
+</script>
+
+<script>
   document.getElementById('logoutBtn').addEventListener('click', function(e){
     e.preventDefault();
     localStorage.removeItem('adminAuth');
     window.location.href = 'index.html';
   });
-
-  loadSignups();
 </script>
 
 </body>
 </html>
-
-
 
 
