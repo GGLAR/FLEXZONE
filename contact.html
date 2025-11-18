@@ -11,6 +11,7 @@
 <header>
   <div class="container navbar">
     <div class="logo">Flexzone</div>
+    <button class="menu-toggle">☰</button>
     <nav>
       <a href="index.html">Home</a>
       <a href="programs.html">Programs</a>
@@ -57,66 +58,66 @@
 
 <footer>© 2025 Flexzone — Built for the Strong.</footer>
 
-<script src="script.js"></script>
-
 <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } 
+    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyDQ-dn4tUmETNMbagt5CZbIf4T8g2rv_Z8",
+    authDomain: "flexzone-75001.firebaseapp.com",
+    projectId: "flexzone-75001",
+    storageBucket: "flexzone-75001.appspot.com",
+    messagingSenderId: "441698000524",
+    appId: "1:441698000524:web:58b7a1e4e7cc11633165a9",
+    measurementId: "G-HNQ8P59D12"
+  };
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let selectedProgram = localStorage.getItem("selectedProgram");
-if (selectedProgram) {
-  const sel = document.getElementById("program");
-  let found = Array.from(sel.options).some(o => o.value === selectedProgram);
-  if (!found) {
-    const opt = document.createElement('option');
-    opt.value = selectedProgram;
-    opt.textContent = selectedProgram;
-    sel.appendChild(opt);
+  let selectedProgram = localStorage.getItem("selectedProgram");
+  if (selectedProgram) {
+    const sel = document.getElementById("program");
+    let found = Array.from(sel.options).some(o => o.value === selectedProgram);
+    if (!found) {
+      const opt = document.createElement('option');
+      opt.value = selectedProgram;
+      opt.textContent = selectedProgram;
+      sel.appendChild(opt);
+    }
+    sel.value = selectedProgram;
   }
-  sel.value = selectedProgram;
-}
 
-const selectedPlan = localStorage.getItem("selectedPlan") || "";
+  const selectedPlan = localStorage.getItem("selectedPlan") || "";
 
-document.getElementById("contactForm").addEventListener("submit", async function(e){
-  e.preventDefault();
+  document.getElementById("contactForm").addEventListener("submit", async function(e){
+    e.preventDefault();
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const message = document.getElementById("message").value.trim();
-  const program = document.getElementById("program").value;
-  const plan = selectedPlan;
-  const date = new Date().toLocaleString();
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
+    const program = document.getElementById("program").value;
+    const plan = selectedPlan;
+    const date = new Date().toISOString();
 
-  await addDoc(collection(db, "signups"), {
-    name: name,
-    email: email,
-    message: message,
-    program: program,
-    plan: plan,
-    date: date
+    await addDoc(collection(db, "signups"), {
+      name: name,
+      email: email,
+      message: message,
+      program: program,
+      plan: plan,
+      date: date
+    });
+
+    localStorage.removeItem("selectedPlan");
+    localStorage.removeItem("selectedProgram");
+
+    window.location.href = "admin.html";
   });
-
-  localStorage.removeItem("selectedPlan");
-  localStorage.removeItem("selectedProgram");
-
-  window.location.href = "admin.html";
-});
-
 </script>
 
 </body>
 </html>
+
+
