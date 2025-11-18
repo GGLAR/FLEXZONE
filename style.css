@@ -37,11 +37,16 @@ header {
     justify-content: space-between;
 }
 
-.logo {
+.navbar .logo {
     font-size: 1.8rem;
     font-weight: 800;
     color: #fff;
     text-shadow: 0 0 10px #e50914;
+    margin: 0;
+}
+
+.logo {
+    display: inline-block;
 }
 
 nav a {
@@ -494,7 +499,6 @@ table tr:hover {
     height: 100%;
     background-color: rgba(0,0,0,0.85);
     overflow-y: auto;
-    animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
@@ -507,7 +511,6 @@ table tr:hover {
     max-width: 450px;
     box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
     border-top: 4px solid #e50914;
-    animation: slideUp 0.4s ease;
 }
 
 .modal-content h2 {
@@ -533,14 +536,4 @@ table tr:hover {
 .close:hover {
     color: #fff;
     transform: scale(1.1);
-}
-
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-
-@keyframes slideUp {
-    from {transform: translateY(50px); opacity: 0;}
-    to {transform: translateY(0); opacity: 1;}
 }
