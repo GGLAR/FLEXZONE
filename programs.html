@@ -9,6 +9,8 @@
 </head>
 <body>
   <header>
+    <div class="container navbar">
+      <div class="logo">Flexzone</div>
       <nav>
         <a href="index.html">Home</a>
         <a href="programs.html" class="active">Programs</a>
@@ -18,8 +20,7 @@
       </nav>
     </div>
   </header>
-     <div class="container navbar">
-      <div class="logo">Flexzone</div>
+
   <section class="page-header">
     <h1>Programs</h1>
     <p>Choose a focus and level up your fitness.</p>
@@ -97,8 +98,8 @@
 
   <script src="script.js"></script>
   <script>
-    document.querySelectorAll('.class-card-link').forEach(el=>{
-      el.addEventListener('click', function(){
+    document.querySelectorAll('.class-card-link').forEach(el => {
+      el.addEventListener('click', function() {
         const name = this.getAttribute('data-program') || this.textContent.trim();
         localStorage.setItem('selectedProgram', name);
         window.location.href = 'pricing.html';
@@ -107,12 +108,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
