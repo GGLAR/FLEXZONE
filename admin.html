@@ -11,7 +11,7 @@
 
 <script>
   if (localStorage.getItem('adminAuth') !== '1') {
-    window.location.href = 'admin.html';
+    window.location.href = 'admin-login.html';
   }
 </script>
 
@@ -46,7 +46,7 @@
 </div>
 
 <script>
-  function loadSignups(){
+  function loadSignups() {
     const stored = JSON.parse(localStorage.getItem('signups')) || [];
     const tbody = document.querySelector('#signupTable tbody');
     tbody.innerHTML = '';
@@ -67,22 +67,22 @@
       tbody.appendChild(tr);
     });
 
-    document.querySelectorAll('.delete-btn').forEach(btn=>{
-      btn.addEventListener('click', function(){
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
         const i = Number(this.getAttribute('data-idx'));
         deleteSignup(i);
       });
     });
 
-    document.querySelectorAll('.edit-btn').forEach(btn=>{
-      btn.addEventListener('click', function(){
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
         const i = Number(this.getAttribute('data-idx'));
         editSignup(i);
       });
     });
   }
 
-  function escapeHtml(str){
+  function escapeHtml(str) {
     return String(str)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
@@ -90,18 +90,18 @@
       .replace(/"/g, '&quot;');
   }
 
-  function deleteSignup(index){
+  function deleteSignup(index) {
     const arr = JSON.parse(localStorage.getItem('signups')) || [];
-    if(index < 0 || index >= arr.length) return;
+    if (index < 0 || index >= arr.length) return;
     arr.splice(index, 1);
     localStorage.setItem('signups', JSON.stringify(arr));
     loadSignups();
   }
 
-  function editSignup(index){
+  function editSignup(index) {
     const arr = JSON.parse(localStorage.getItem('signups')) || [];
     const u = arr[index];
-    if(!u) return;
+    if (!u) return;
     const newName = prompt('Edit name:', u.name) || u.name;
     const newEmail = prompt('Edit email:', u.email) || u.email;
     const newProgram = prompt('Edit program:', u.program || '') || u.program;
@@ -111,10 +111,10 @@
     loadSignups();
   }
 
-  document.getElementById('logoutBtn').addEventListener('click', function(e){
+  document.getElementById('logoutBtn').addEventListener('click', function (e) {
     e.preventDefault();
     localStorage.removeItem('adminAuth');
-    window.location.href = 'index.html';
+    window.location.href = 'admin-login.html';
   });
 
   loadSignups();
@@ -122,7 +122,6 @@
 
 </body>
 </html>
-
 
 
 
