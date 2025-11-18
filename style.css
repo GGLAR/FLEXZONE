@@ -6,7 +6,7 @@
 }
 
 body {
-    background-image: url('backgroound.html');
+    background-image: url('backgroound.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -88,7 +88,7 @@ nav a.active {
 }
 
 .hero {
-    background: url("backgroound.html") no-repeat center/cover;
+    background: url("backgroound.jpg") no-repeat center/cover;
     height: 90vh;
     display: flex;
     align-items: center;
@@ -544,4 +544,3 @@ table tr:hover {
     from {transform: translateY(50px); opacity: 0;}
     to {transform: translateY(0); opacity: 1;}
 }
-
