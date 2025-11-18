@@ -27,12 +27,12 @@
 </section>
 
 <section class="contact container">
-  <form id="contactForm" aria-label="Contact form">
 
+  <form id="contactForm" aria-label="Contact form">
     <input type="text" id="name" placeholder="Full Name" required>
     <input type="email" id="email" placeholder="Email" required>
 
-    <select id="program" aria-label="Select program">
+    <select id="program" required>
       <option value="">Select Program</option>
       <option>Biceps</option>
       <option>Back</option>
@@ -44,10 +44,9 @@
       <option>Recovery Flow</option>
     </select>
 
-    <textarea id="message" placeholder="Your Message" ></textarea>
+    <textarea id="message" placeholder="Your Message"></textarea>
 
     <button type="submit" class="btn btn-primary">Send Message</button>
-
   </form>
 
   <div class="hours">
@@ -65,20 +64,20 @@
 <script src="script.js"></script>
 <script>
 
-  let selectedProgram = localStorage.getItem("selectedProgram");
-  if (selectedProgram) {
+  let savedProgram = localStorage.getItem("selectedProgram");
+  if (savedProgram) {
     const sel = document.getElementById("program");
-    let found = Array.from(sel.options).some(o => o.value === selectedProgram);
-    if (!found && selectedProgram) {
-      const opt = document.createElement('option');
-      opt.value = selectedProgram;
-      opt.textContent = selectedProgram;
+    let exists = Array.from(sel.options).some(o => o.value === savedProgram);
+    if (!exists) {
+      const opt = document.createElement("option");
+      opt.value = savedProgram;
+      opt.textContent = savedProgram;
       sel.appendChild(opt);
     }
-    sel.value = selectedProgram;
+    sel.value = savedProgram;
   }
 
-  const selectedPlan = localStorage.getItem("selectedPlan") || "";
+  const savedPlan = localStorage.getItem("selectedPlan") || "";
 
   document.getElementById("contactForm").addEventListener("submit", function(e){
     e.preventDefault();
@@ -87,21 +86,25 @@
     const email = document.getElementById("email").value.trim();
     const message = document.getElementById("message").value.trim();
     const program = document.getElementById("program").value;
-    const plan = selectedPlan;
+    const plan = savedPlan;
     const date = new Date().toLocaleString();
 
-    const user = { name, email, message, program, plan, date };
+    const entry = { name, email, message, program, plan, date };
 
     const stored = JSON.parse(localStorage.getItem("signups")) || [];
-    stored.push(user);
+    stored.push(entry);
     localStorage.setItem("signups", JSON.stringify(stored));
 
     localStorage.removeItem("selectedPlan");
     localStorage.removeItem("selectedProgram");
-    window.location.href = "admin.html";
+
+    alert("Message sent successfully!");
+    this.reset();
   });
+
 </script>
 
 </body>
 </html>
+
 
