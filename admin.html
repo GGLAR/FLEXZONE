@@ -11,16 +11,17 @@
 
 <script>
   if (localStorage.getItem('adminAuth') !== '1') {
+    window.location.href = "admin-login.html";
   }
 </script>
 
-<div class="sidebar" role="navigation" aria-label="Admin sidebar">
+<div class="sidebar">
   <h2>Admin Panel</h2>
   <a href="index.html">Home</a>
   <a href="programs.html">Programs / Workouts</a>
   <a href="pricing.html">Plans</a>
   <a href="contact.html">Contact</a>
-  <a href="admin.html" id="logoutBtn" class="logout">Logout</a>
+  <a href="#" id="logoutBtn" class="logout">Logout</a>
 </div>
 
 <div class="main-content">
@@ -28,7 +29,7 @@
 
   <h2>Recent Signups</h2>
 
-  <table id="signupTable" aria-live="polite">
+  <table id="signupTable">
     <thead>
       <tr>
         <th>Name</th>
@@ -46,14 +47,14 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } 
+  import { getFirestore, collection, getDocs, doc, deleteDoc, updateDoc, getDoc, query, orderBy } 
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDQ-dn4tUmETNMbagt5CZbIf4T8g2rv_Z8",
     authDomain: "flexzone-75001.firebaseapp.com",
     projectId: "flexzone-75001",
-    storageBucket: "flexzone-75001.firebasestorage.app",
+    storageBucket: "flexzone-75001.appspot.com",
     messagingSenderId: "441698000524",
     appId: "1:441698000524:web:58b7a1e4e7cc11633165a9",
     measurementId: "G-HNQ8P59D12"
@@ -66,7 +67,9 @@
     const tbody = document.querySelector("#signupTable tbody");
     tbody.innerHTML = "";
 
-    const snap = await getDocs(collection(db, "signups"));
+    const q = query(collection(db, "signups"), orderBy("date", "desc"));
+    const snap = await getDocs(q);
+
     snap.forEach(d => {
       const u = d.data();
       const tr = document.createElement("tr");
@@ -94,7 +97,22 @@
 
   window.editSignup = async function(id){
     const ref = doc(db, "signups", id);
-    const snap = await getDocs(collection(db, "signups"));
+    const snap = await getDoc(ref);
+    const u = snap.data();
+
+    const newName = prompt("Name:", u.name);
+    const newEmail = prompt("Email:", u.email);
+    const newProgram = prompt("Program:", u.program);
+    const newPlan = prompt("Plan:", u.plan);
+
+    await updateDoc(ref, {
+      name: newName,
+      email: newEmail,
+      program: newProgram,
+      plan: newPlan
+    });
+
+    loadSignups();
   }
 
   loadSignups();
@@ -110,5 +128,6 @@
 
 </body>
 </html>
+
 
 
