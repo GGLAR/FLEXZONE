@@ -6,7 +6,7 @@
 }
 
 body {
-  background-image: url('background.jpg');
+  background-image: url('backgroound.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -553,3 +553,4 @@ table tr:hover {
   from {transform: translateY(50px); opacity: 0;}
   to {transform: translateY(0); opacity: 1;}
 }
+
