@@ -84,7 +84,7 @@ nav a.active {
 }
 
 .hero {
-  background: url("Gym.jpg") no-repeat center/cover;
+  background: url("backgroound.jpg") no-repeat center/cover;
   height: 90vh;
   display: flex;
   align-items: center;
@@ -545,4 +545,5 @@ table tr:hover {
 @keyframes slideUp {
   from {transform: translateY(50px); opacity: 0;}
   to {transform: translateY(0); opacity: 1;}
+
 }  
