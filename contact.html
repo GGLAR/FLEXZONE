@@ -1,70 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flexzone — Contact & Signup</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact | Flexzone</title>
   <link rel="icon" type="image/png" href="logo.jpg">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+<header>
+  <div class="container navbar">
+    <div class="logo">Flexzone</div>
 
-  <form id="signupForm">
+    <button class="menu-toggle" aria-label="Open menu">☰</button>
 
-    <label>Name</label>
-    <input type="text" id="name" required>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="programs.html">Programs</a>
+      <a href="pricing.html">Plans</a>
+      <a href="contact.html" class="active">Contact</a>
+      <a href="admin.html" class="logout">Admin</a>
+    </nav>
+  </div>
+</header>
 
-    <label>Email</label>
-    <input type="email" id="email" required>
+<section class="page-header">
+  <h1>Contact Us</h1>
+  <p>Book your free trial or send us a message!</p>
+</section>
 
-    <label>Program</label>
-    <select id="program" required>
+<section class="contact container">
+  <form id="contactForm" aria-label="Contact form">
+
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+
+    <select id="program" aria-label="Select program">
       <option value="">Select Program</option>
-      <option>Full Body Workout</option>
-      <option>Fat Loss</option>
-      <option>Muscle Gain</option>
-      <option>Strength Training</option>
+      <option>Biceps</option>
+      <option>Back</option>
+      <option>Chest</option>
+      <option>Leg</option>
+      <option>Core</option>
+      <option>Arm</option>
+      <option>Cardio</option>
+      <option>Recovery Flow</option>
     </select>
 
-    <label>Plan</label>
-    <select id="plan" required>
-      <option value="">Select Plan</option>
-      <option>Basic</option>
-      <option>Standard</option>
-      <option>Premium</option>
-    </select>
+    <textarea id="message" placeholder="Your Message" ></textarea>
 
-    <button type="submit" class="btn">Submit</button>
+    <button type="submit" class="btn btn-primary">Send Message</button>
+
   </form>
 
-  <p id="msg" style="margin-top:20px; font-weight:bold;"></p>
+  <div class="hours">
+    <h3>Opening Hours</h3>
+    <p>Mon–Sun: 24/7</p>
+    <p>Saturday: 8:00am to 5:00pm</p>
+    <p>Sunday: Closed </p>
+    <h3>Location</h3>
+    <p>Lucena City, Ibabang Dupay, Montreal Street</p>
+  </div>
+</section>
 
-</div>
+<footer>© 2025 Flexzone — Built for the Strong.</footer>
 
+<script src="script.js"></script>
 <script>
-  document.getElementById('signupForm').addEventListener('submit', function(e){
+
+  let selectedProgram = localStorage.getItem("selectedProgram");
+  if (selectedProgram) {
+    const sel = document.getElementById("program");
+    let found = Array.from(sel.options).some(o => o.value === selectedProgram);
+    if (!found && selectedProgram) {
+      const opt = document.createElement('option');
+      opt.value = selectedProgram;
+      opt.textContent = selectedProgram;
+      sel.appendChild(opt);
+    }
+    sel.value = selectedProgram;
+  }
+
+  const selectedPlan = localStorage.getItem("selectedPlan") || "";
+
+  document.getElementById("contactForm").addEventListener("submit", function(e){
     e.preventDefault();
 
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const program = document.getElementById('program').value;
-    const plan = document.getElementById('plan').value;
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
+    const program = document.getElementById("program").value;
+    const plan = selectedPlan;
     const date = new Date().toLocaleString();
 
-    const newEntry = { name, email, program, plan, date };
-    const stored = JSON.parse(localStorage.getItem('signups')) || [];
-    stored.push(newEntry);
-    localStorage.setItem('signups', JSON.stringify(stored));
+    const user = { name, email, message, program, plan, date };
 
-    document.getElementById('msg').textContent = "Your signup has been submitted successfully!";
-    this.reset();
+    const stored = JSON.parse(localStorage.getItem("signups")) || [];
+    stored.push(user);
+    localStorage.setItem("signups", JSON.stringify(stored));
+
+    localStorage.removeItem("selectedPlan");
+    localStorage.removeItem("selectedProgram");
+    window.location.href = "admin.html";
   });
 </script>
 
 </body>
 </html>
-
-
-
-
-
