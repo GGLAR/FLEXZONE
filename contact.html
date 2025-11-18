@@ -11,7 +11,9 @@
 <header>
   <div class="container navbar">
     <div class="logo">Flexzone</div>
-    <button class="menu-toggle">☰</button>
+
+    <button class="menu-toggle" aria-label="Open menu">☰</button>
+
     <nav>
       <a href="index.html">Home</a>
       <a href="programs.html">Programs</a>
@@ -28,10 +30,12 @@
 </section>
 
 <section class="contact container">
-  <form id="contactForm">
+  <form id="contactForm" aria-label="Contact form">
+
     <input type="text" id="name" placeholder="Full Name" required>
     <input type="email" id="email" placeholder="Email" required>
-    <select id="program">
+
+    <select id="program" aria-label="Select program">
       <option value="">Select Program</option>
       <option>Biceps</option>
       <option>Back</option>
@@ -42,15 +46,18 @@
       <option>Cardio</option>
       <option>Recovery Flow</option>
     </select>
-    <textarea id="message" placeholder="Your Message"></textarea>
+
+    <textarea id="message" placeholder="Your Message" ></textarea>
+
     <button type="submit" class="btn btn-primary">Send Message</button>
+
   </form>
 
   <div class="hours">
     <h3>Opening Hours</h3>
     <p>Mon–Sun: 24/7</p>
     <p>Saturday: 8:00am to 5:00pm</p>
-    <p>Sunday: Closed</p>
+    <p>Sunday: Closed </p>
     <h3>Location</h3>
     <p>Lucena City, Ibabang Dupay, Montreal Street</p>
   </div>
@@ -58,29 +65,14 @@
 
 <footer>© 2025 Flexzone — Built for the Strong.</footer>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } 
-    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDQ-dn4tUmETNMbagt5CZbIf4T8g2rv_Z8",
-    authDomain: "flexzone-75001.firebaseapp.com",
-    projectId: "flexzone-75001",
-    storageBucket: "flexzone-75001.appspot.com",
-    messagingSenderId: "441698000524",
-    appId: "1:441698000524:web:58b7a1e4e7cc11633165a9",
-    measurementId: "G-HNQ8P59D12"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+<script src="script.js"></script>
+<script>
 
   let selectedProgram = localStorage.getItem("selectedProgram");
   if (selectedProgram) {
     const sel = document.getElementById("program");
     let found = Array.from(sel.options).some(o => o.value === selectedProgram);
-    if (!found) {
+    if (!found && selectedProgram) {
       const opt = document.createElement('option');
       opt.value = selectedProgram;
       opt.textContent = selectedProgram;
@@ -91,7 +83,7 @@
 
   const selectedPlan = localStorage.getItem("selectedPlan") || "";
 
-  document.getElementById("contactForm").addEventListener("submit", async function(e){
+  document.getElementById("contactForm").addEventListener("submit", function(e){
     e.preventDefault();
 
     const name = document.getElementById("name").value.trim();
@@ -99,25 +91,19 @@
     const message = document.getElementById("message").value.trim();
     const program = document.getElementById("program").value;
     const plan = selectedPlan;
-    const date = new Date().toISOString();
+    const date = new Date().toLocaleString();
 
-    await addDoc(collection(db, "signups"), {
-      name: name,
-      email: email,
-      message: message,
-      program: program,
-      plan: plan,
-      date: date
-    });
+    const user = { name, email, message, program, plan, date };
+
+    const stored = JSON.parse(localStorage.getItem("signups")) || [];
+    stored.push(user);
+    localStorage.setItem("signups", JSON.stringify(stored));
 
     localStorage.removeItem("selectedPlan");
     localStorage.removeItem("selectedProgram");
-
     window.location.href = "admin.html";
   });
 </script>
 
 </body>
 </html>
-
-
