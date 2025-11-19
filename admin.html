@@ -4,10 +4,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Flexzone Admin Panel</title>
-<link rel="icon" type="image/png" href="logo.jpg">
+  <link rel="icon" type="image/png" href="logo.jpg">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+<script>
+  const isLogged = localStorage.getItem("adminAuth") === "1";
+</script>
+
+<div id="loginSection" style="display:none; text-align:center; margin-top:80px;">
+  <h2>Admin Login</h2>
+  <input id="user" type="text" placeholder="Username" style="padding:8px; width:200px;"><br><br>
+  <input id="pass" type="password" placeholder="Password" style="padding:8px; width:200px;"><br><br>
+  <button id="loginBtn" style="padding:10px 20px;">Login</button>
+  <p id="error" style="color:red; display:none;">Invalid username or password</p>
+</div>
+
+<div id="adminPanel" style="display:none;">
 
 <div class="sidebar" role="navigation" aria-label="Admin sidebar">
   <h2>Admin Panel</h2>
@@ -15,8 +29,9 @@
   <a href="programs.html">Programs / Workouts</a>
   <a href="pricing.html">Plans</a>
   <a href="contact.html">Contact</a>
-  <a href="admin.html" id="logoutBtn" class="logout">Logout</a>
+  <a href="#" id="logoutBtn" class="logout">Logout</a>
 </div>
+
 <div class="main-content">
   <h1>Welcome, Admin</h1>
 
@@ -38,7 +53,33 @@
 
 </div>
 
+</div>
+
 <script>
+  if (!isLogged) {
+    document.getElementById("loginSection").style.display = "block";
+  } else {
+    document.getElementById("adminPanel").style.display = "block";
+  }
+
+  document.getElementById("loginBtn")?.addEventListener("click", function () {
+    const u = document.getElementById("user").value;
+    const p = document.getElementById("pass").value;
+
+    if (u === "ANGELO VERZO" && p === "HAHAHA") {
+      localStorage.setItem("adminAuth", "1");
+      location.reload();
+    } else {
+      document.getElementById("error").style.display = "block";
+    }
+  });
+
+  document.getElementById("logoutBtn")?.addEventListener("click", function (e) {
+    e.preventDefault();
+    localStorage.removeItem("adminAuth");
+    location.reload();
+  });
+
   function loadSignups() {
     const stored = JSON.parse(localStorage.getItem('signups')) || [];
     const tbody = document.querySelector('#signupTable tbody');
@@ -104,19 +145,11 @@
     loadSignups();
   }
 
-  document.getElementById('logoutBtn').addEventListener('click', function (e) {
-    e.preventDefault();
-    localStorage.removeItem('adminAuth');
-    window.location.href = 'index.html';
-  });
-
-  loadSignups();
+  if (isLogged) loadSignups();
 </script>
 
 </body>
 </html>
-
-
 
 
 
