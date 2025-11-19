@@ -24,7 +24,7 @@
 <div id="adminPanel" style="display:none;">
 
 <div class="sidebar" role="navigation" aria-label="Admin sidebar">
-  <h2> Admin </h2>
+  <h2>Admin Panel</h2>
   <a href="index.html">Home</a>
   <a href="programs.html">Programs / Workouts</a>
   <a href="pricing.html">Plans</a>
@@ -56,12 +56,17 @@
 </div>
 
 <script>
-  if (!isLogged) {
-    document.getElementById("loginSection").style.display = "block";
-  } else {
-    document.getElementById("adminPanel").style.display = "block";
-  }
+  document.getElementById("loginSection").style.display = "none";
+  document.getElementById("adminPanel").style.display = "none";
 
+  if (isLogged === true) {
+    document.getElementById("adminPanel").style.display = "block";
+  } else {
+    document.getElementById("loginSection").style.display = "block";
+  }
+</script>
+
+<script>
   document.getElementById("loginBtn")?.addEventListener("click", function () {
     const u = document.getElementById("user").value;
     const p = document.getElementById("pass").value;
@@ -150,9 +155,6 @@
 
 </body>
 </html>
-
-
-
 
 
 
