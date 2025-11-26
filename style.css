@@ -537,3 +537,76 @@ table tr:hover {
     color: #fff;
     transform: scale(1.1);
 }
+.upload-bottom {
+  margin-top: 8px;
+  display: block;
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: #111;
+      padding: 20px;
+    }
+    header {
+      background: #222;
+      padding: 15px 0;
+      margin-bottom: 25px;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: auto;
+      color: white;
+    }
+    nav a {
+      margin-left: 20px;
+      color: white;
+      text-decoration: none;
+    }
+    nav a.active {
+      color: #ff4747;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .class-card {
+      background: #222;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .class-card:hover {
+      transform: scale(1.03);
+    }
+
+    .class-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .class-card button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #ff4747;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .class-card button:hover {
+      background: #ff2e2e;
+    }
