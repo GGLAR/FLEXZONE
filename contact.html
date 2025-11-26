@@ -34,16 +34,23 @@
     <input type="text" id="name" placeholder="Full Name" required>
     <input type="email" id="email" placeholder="Email" required>
 
-    <select id="program" required>
+    <select id="programSelect" required>
       <option value="">Select Program</option>
-      <option>Biceps</option>
-      <option>Back</option>
-      <option>Chest</option>
-      <option>Leg</option>
-      <option>Core</option>
-      <option>Arm</option>
-      <option>Cardio</option>
-      <option>Recovery Flow</option>
+      <option value="Bicep Day">Bicep Day</option>
+      <option value="Back Day">Back Day</option>
+      <option value="Chest Day">Chest Day</option>
+      <option value="Leg Day">Leg Day</option>
+      <option value="Core Day">Core Day</option>
+      <option value="Arm Day">Arm Day</option>
+      <option value="Cardio">Cardio</option>
+      <option value="Recovery Flow">Recovery Flow</option>
+      <option value="Zumba">Zumba</option>
+    </select>
+
+    <select id="planType" required>
+      <option value="">Select Plan Type</option>
+      <option value="Student">Student</option>
+      <option value="Regular">Regular</option>
     </select>
 
     <textarea id="message" placeholder="Your Message"></textarea>
@@ -66,47 +73,49 @@
 <footer>© 2025 Flexzone — Built for the Strong.</footer>
 
 <script src="script.js"></script>
+
+<!-- CLEAN FINAL SCRIPT -->
 <script>
+const params = new URLSearchParams(window.location.search);
+const selectedProgram = params.get("program");
 
-  let savedProgram = localStorage.getItem("selectedProgram");
-  if (savedProgram) {
-    const sel = document.getElementById("program");
-    let exists = [...sel.options].some(o => o.value === savedProgram);
-    if (!exists) {
-      const opt = document.createElement("option");
-      opt.value = savedProgram;
-      opt.textContent = savedProgram;
-      sel.appendChild(opt);
+// Autofill program from URL
+if (selectedProgram) {
+    const dropdown = document.getElementById("programSelect");
+    
+    // Check if exists in list, if not add dynamically
+    if (![...dropdown.options].some(opt => opt.value === selectedProgram)) {
+        const opt = document.createElement("option");
+        opt.value = selectedProgram;
+        opt.textContent = selectedProgram;
+        dropdown.appendChild(opt);
     }
-    sel.value = savedProgram;
-  }
 
-  const savedPlan = localStorage.getItem("selectedPlan") || "";
+    dropdown.value = selectedProgram;
+}
 
-  document.getElementById("contactForm").addEventListener("submit", function(e){
+// Form handler
+document.getElementById("contactForm").addEventListener("submit", function(e){
     e.preventDefault();
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const program = document.getElementById("program").value;
-    const message = document.getElementById("message").value.trim();
-    const plan = savedPlan;
-    const date = new Date().toLocaleString();
-
-    const entry = { name, email, program, plan, message, date };
+    const entry = {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        program: document.getElementById("programSelect").value,
+        planType: document.getElementById("planType").value,
+        message: document.getElementById("message").value.trim(),
+        date: new Date().toLocaleString()
+    };
 
     const stored = JSON.parse(localStorage.getItem("signups")) || [];
     stored.push(entry);
     localStorage.setItem("signups", JSON.stringify(stored));
 
-    localStorage.removeItem("selectedProgram");
-    localStorage.removeItem("selectedPlan");
     this.reset();
     window.location.href = "admin.html";
-
-  });
-
+});
 </script>
 
 </body>
 </html>
+
