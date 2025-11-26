@@ -1,18 +1,20 @@
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Programs | Flexzone</title>
-  <link rel="icon" type="image/jpeg" href="logo.jpg">
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flexzone | Home</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
   <header>
-    <div class="container navbar">
+    <div class="navbar">
       <div class="logo">Flexzone</div>
       <nav>
-        <a href="index.html">Home</a>
-        <a href="programs.html" class="active">Programs</a>
+        <a href="index.html" class="active">Home</a>
+        <a href="programs.html">Programs</a>
         <a href="pricing.html">Plans</a>
         <a href="contact.html">Contact</a>
         <a href="admin.html" class="logout">Admin</a>
@@ -20,88 +22,104 @@
     </div>
   </header>
 
-  <section class="page-header">
-    <h1>Programs</h1>
-    <p>Choose a focus and level up your fitness.</p>
-  </section>
+  <div class="container">
 
-  <section class="class-grid container">
-    <a class="class-card-link" data-program="Bicep Day">
+    <a href="pricing.html" class="class-card-link">
       <div class="class-card">
-        <img src="biceps.jpg" alt="Biceps">
+        <img id="img-bicep" src="biceps.jpg" alt="Biceps">
         <h3>Bicep Day</h3>
         <p>Focus on curls and arm strength to build peak performance.</p>
+        <button onclick="editCard(event, this)">Change</button>
       </div>
     </a>
 
-    <a class="class-card-link" data-program="Chest Day">
+    <a href="contact.html?program=Chest Day" class="class-card-link">
       <div class="class-card">
-        <img src="chest.jpg" alt="Chest">
+        <img id="img-chest" src="chest.jpg" alt="Chest">
         <h3>Chest Day</h3>
         <p>Bench press, incline, and chest isolation movements.</p>
+        <button onclick="editCard(event, this)">Change</button>
       </div>
     </a>
 
-    <a class="class-card-link" data-program="Leg Day">
+    <a href="contact.html?program=Leg Day" class="class-card-link">
       <div class="class-card">
-        <img src="leg.jpg" alt="Legs">
+        <img id="img-leg" src="leg.jpg" alt="Legs">
         <h3>Leg Day</h3>
         <p>Squats, deadlifts, and accessories for powerful legs.</p>
+        <button onclick="editCard(event, this)">Change</button>
       </div>
     </a>
 
-    <a class="class-card-link" data-program="Cardio">
+    <a href="contact.html?program=Cardio" class="class-card-link">
       <div class="class-card">
-        <img src="cardio.jpg" alt="Cardio">
+        <img id="img-cardio" src="cardio.jpg" alt="Cardio">
         <h3>Cardio</h3>
         <p>HIIT and endurance sessions to improve stamina.</p>
+        <button onclick="editCard(event, this)">Change</button>
       </div>
     </a>
 
-    <a class="class-card-link" data-program="Back Day">
+    <a href="contact.html?program=Back Day" class="class-card-link">
       <div class="class-card">
-        <img src="back.jpg" alt="Back">
+        <img id="img-back" src="back.jpg" alt="Back Day">
         <h3>Back Day</h3>
         <p>Rows, pull-ups, and posterior chain strengthening.</p>
+        <button onclick="editCard(event, this)">Change</button>
       </div>
     </a>
 
-    <a class="class-card-link" data-program="Core Day">
+    <a href="contact.html?program=Core Day" class="class-card-link">
       <div class="class-card">
-        <img src="core.jpg" alt="Core">
+        <img id="img-core" src="core.jpg" alt="Core">
         <h3>Core Day</h3>
         <p>Planks, anti-rotation, and trunk stability work.</p>
+        <button onclick="editCard(event, this)">Change</button>
       </div>
     </a>
 
-    <a class="class-card-link" data-program="Arm Day">
+    <a href="contact.html?program=Arm Day" class="class-card-link">
       <div class="class-card">
-        <img src="arm.jpg" alt="Arms">
+        <img id="img-arm" src="arm.jpg" alt="Arm Day">
         <h3>Arm Day</h3>
-        <p>Supersets for triceps and biceps — get those guns.</p>
+        <p>Supersets for triceps and biceps get those guns.</p>
+        <button onclick="editCard(event, this)">Change</button>
       </div>
     </a>
 
-    <a class="class-card-link" data-program="Recovery Flow">
+    <a href="contact.html?program=Recovery Flow" class="class-card-link">
       <div class="class-card">
-        <img src="recovery flow.jpg" alt="Recovery">
+        <img id="img-recovery" src="recovery flow.jpg" alt="Recovery Flow">
         <h3>Recovery Flow</h3>
         <p>Mobility and light movement to recover and improve range.</p>
+        <button onclick="editCard(event, this)">Change</button>
       </div>
     </a>
-  </section>
 
-  <footer>© 2025 Flexzone — Built for the Strong.</footer>
+  </div>
 
-  <script src="script.js"></script>
   <script>
-    document.querySelectorAll('.class-card-link').forEach(el => {
-      el.addEventListener('click', function() {
-        const name = this.getAttribute('data-program') || this.textContent.trim();
-        localStorage.setItem('selectedProgram', name);
-        window.location.href = 'pricing.html';
-      });
-    });
+  function editCard(event, btn) {
+      event.preventDefault();
+      let card = btn.parentElement;
+
+      let newTitle = prompt("Enter new title:", card.querySelector("h3").innerText);
+      if (newTitle && newTitle.trim() !== "") {
+          card.querySelector("h3").innerText = newTitle;
+          btn.parentElement.parentElement.href = "pricing.html" + encodeURIComponent(newTitle);
+      }
+
+      let newDesc = prompt("Enter new description:", card.querySelector("p").innerText);
+      if (newDesc && newDesc.trim() !== "") {
+          card.querySelector("p").innerText = newDesc;
+      }
+
+      let newImg = prompt("Enter new image file name:");
+      if (newImg && newImg.trim() !== "") {
+          card.querySelector("img").src = newImg;
+      }
+  }
   </script>
-</body>
-</html>
+
+  </body>
+  </html>
