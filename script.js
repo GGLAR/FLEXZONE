@@ -8,7 +8,6 @@
     const isOpen = nav.classList.toggle("active");
     if(isOpen){
       nav.style.display = 'flex';
-
       const firstLink = nav.querySelector('a');
       if(firstLink) firstLink.focus();
     } else {
@@ -66,12 +65,97 @@
       }
     });
   }
+
   window.addEventListener('resize', handleResize);
   handleResize();
-
 })();
+
 if (u === "ANGELO VERZO" && p === "HAHAHA") {
   localStorage.setItem("adminAuth", "1");
   location.reload();
 }
 
+arr[index] = { 
+  ...u, 
+  name: newName, 
+  email: newEmail, 
+  program: newProgram, 
+  plan: newPlan,
+  dateEnd: newDateEnd 
+};
+
+document.querySelectorAll('.class-card img').forEach((img) => {
+  const uploader = document.createElement("input");
+  uploader.type = "file";
+  uploader.accept = "image/*";
+  uploader.className = "upload-each";
+  img.insertAdjacentElement("afterend", uploader);
+
+  uploader.addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      img.src = e.target.result; 
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+document.querySelectorAll('.upload-btn').forEach(input => {
+  input.addEventListener('change', function () {
+    const imgId = this.getAttribute('data-img');
+    const imgTag = document.getElementById(imgId);
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      imgTag.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+document.querySelectorAll('.class-grid img').forEach((img) => {
+  if (img.id.startsWith("img-")) return;
+
+  const uploader = document.createElement("input");
+  uploader.type = "file";
+  uploader.accept = "image/*";
+  uploader.className = "upload-bottom";
+  img.insertAdjacentElement("afterend", uploader);
+
+  uploader.addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+const images = {
+  bicep: "biceps.jpg",
+  chest: "chest.jpg",
+  leg: "leg.jpg",
+  cardio: "cardio.jpg",
+  back: "back.jpg",
+  core: "core.jpg",
+  arm: "arm.jpg",
+  recovery: "recovery flow.jpg",
+  zumba: "zumba.png"
+};
+
+document.getElementById("img-bicep").src = images.bicep;
+document.getElementById("img-chest").src = images.chest;
+document.getElementById("img-leg").src = images.leg;
+document.getElementById("img-cardio").src = images.cardio;
+document.getElementById("img-back").src = images.back;
+document.getElementById("img-core").src = images.core;
+document.getElementById("img-arm").src = images.arm;
+document.getElementById("img-recovery").src = images.recovery;
+document.getElementById("img-zumba").src = images.zumba;
