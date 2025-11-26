@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Flexzone Admin Panel</title>
   <link rel="icon" type="image/png" href="logo.jpg">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -34,9 +34,7 @@
 
 <div class="main-content">
   <h1>Welcome, Admin</h1>
-
   <h2>Recent Signups</h2>
-
   <table id="signupTable" aria-live="polite">
     <thead>
       <tr>
@@ -44,15 +42,25 @@
         <th>Email</th>
         <th>Program</th>
         <th>Plan</th>
-        <th>Date</th>
+        <th>Plan Type</th>
+        <th>Date Register</th>
+        <th>Date End</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 </div>
-
 </div>
+
+
+<select id="workoutSelect">
+  <option value="">Choose workout</option>
+  <option value="Leg Day">Leg Day</option>
+  <option value="Push Day">Push Day</option>
+  <option value="Pull Day">Pull Day</option>
+  <option value="Cardio Day">Cardio Day</option>
+</select>
 
 <script>
   if (isLogged) {
@@ -65,10 +73,16 @@
 </script>
 
 <script>
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    const d = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return d.toLocaleDateString("en-US", options);
+  }
+
   document.getElementById("loginBtn")?.addEventListener("click", function () {
     const u = document.getElementById("user").value;
     const p = document.getElementById("pass").value;
-
     if (u === "ANGELO VERZO" && p === "HAHAHA") {
       localStorage.setItem("adminAuth", "1");
       location.reload();
@@ -89,16 +103,32 @@
     tbody.innerHTML = '';
 
     stored.slice().reverse().forEach((u, idx) => {
+      if (!u.date) u.date = new Date().toISOString().split("T")[0];
+      if (!u.dateEnd && u.date) {
+        const start = new Date(u.date);
+        const end = new Date(start);
+        end.setDate(start.getDate() + 30);
+        u.dateEnd = end.toISOString().split("T")[0];
+      }
+      if (!u.planType) u.planType = "Regular";
+
+      const originalIndex = stored.length - 1 - idx;
+      stored[originalIndex] = u;
+      localStorage.setItem("signups", JSON.stringify(stored));
+
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${escapeHtml(u.name || '')}</td>
         <td>${escapeHtml(u.email || '')}</td>
         <td>${escapeHtml(u.program || '-')}</td>
         <td>${escapeHtml(u.plan || '-')}</td>
-        <td>${escapeHtml(u.date || '')}</td>
+        <td>${escapeHtml(u.planType || '-')}</td>
+        <td>${formatDate(u.date)}</td>
+        <td>${formatDate(u.dateEnd)}</td>
         <td>
-          <button class="edit-btn" data-idx="${stored.length - 1 - idx}">Edit</button>
-          <button class="delete-btn" data-idx="${stored.length - 1 - idx}">Delete</button>
+          <button class="edit-btn" data-idx="${originalIndex}">Edit</button>
+          <button class="renew-btn" data-idx="${originalIndex}">Renew</button>
+          <button class="delete-btn" data-idx="${originalIndex}">Delete</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -115,6 +145,13 @@
       btn.addEventListener('click', function () {
         const i = Number(this.getAttribute('data-idx'));
         editSignup(i);
+      });
+    });
+
+    document.querySelectorAll('.renew-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const i = Number(this.getAttribute('data-idx'));
+        renewSignupPrompt(i);
       });
     });
   }
@@ -143,7 +180,45 @@
     const newEmail = prompt('Edit email:', u.email) || u.email;
     const newProgram = prompt('Edit program:', u.program || '') || u.program;
     const newPlan = prompt('Edit plan:', u.plan || '') || u.plan;
-    arr[index] = { ...u, name: newName, email: newEmail, program: newProgram, plan: newPlan };
+    const newPlanType = prompt('Edit plan type:', u.planType || '') || u.planType;
+    const newDateEnd = prompt('Edit end date:', u.dateEnd || '') || u.dateEnd;
+
+    arr[index] = { 
+      ...u, 
+      name: newName, 
+      email: newEmail, 
+      program: newProgram, 
+      plan: newPlan, 
+      planType: newPlanType, 
+      dateEnd: newDateEnd 
+    };
+
+    localStorage.setItem('signups', JSON.stringify(arr));
+    loadSignups();
+  }
+
+  function renewSignupPrompt(index) {
+    const arr = JSON.parse(localStorage.getItem('signups')) || [];
+    const u = arr[index];
+    if (!u) return;
+
+    const now = new Date();
+    const defaultStart = now.toISOString().split("T")[0];
+
+    const end = new Date(now);
+    end.setDate(now.getDate() + 30);
+
+    const defaultEnd = end.toISOString().split("T")[0];
+
+    const newDate = prompt('Renew Date Register:', defaultStart) || defaultStart;
+    const newDateEnd = prompt('Renew Date End:', defaultEnd) || defaultEnd;
+
+    arr[index] = { 
+      ...u, 
+      date: newDate, 
+      dateEnd: newDateEnd 
+    };
+
     localStorage.setItem('signups', JSON.stringify(arr));
     loadSignups();
   }
@@ -154,5 +229,5 @@
 </body>
 </html>
 
-
+  
 
